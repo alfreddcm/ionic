@@ -1,0 +1,158 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      Expense Tracker
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="dashboard-content">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Dashboard</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- User Welcome -->
+  <div *ngIf="currentUser" class="welcome-section">
+    <h2>Welcome back, {{ currentUser.name }}!</h2>
+    <p>Here's your expense overview</p>
+  </div>
+
+  <div *ngIf="!currentUser" class="welcome-section">
+    <h2>Welcome to Expense Tracker</h2>
+    <p>Please login to continue</p>
+  </div>
+
+  <!-- Today's Summary -->
+  <ion-grid *ngIf="currentUser">
+    <ion-row>
+      <ion-col size="6">
+        <ion-card class="summary-card today-expenses">
+          <ion-card-content>
+            <div class="card-icon">
+              <ion-icon name="wallet-outline" color="primary"></ion-icon>
+            </div>
+            <h3>Today's Expenses</h3>
+            <p class="amount">${{ getTodayTotal().toFixed(2) }}</p>
+            <small>{{ todayExpenses.length }} transactions</small>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      
+      <ion-col size="6">
+        <ion-card class="summary-card budget-status">
+          <ion-card-content>
+            <div class="card-icon">
+              <ion-icon name="stats-chart-outline" color="secondary"></ion-icon>
+            </div>
+            <h3>Budget Status</h3>
+            <p class="amount" *ngIf="currentBudget">${{ currentBudget.remaining.toFixed(2) }}</p>
+            <p class="amount" *ngIf="!currentBudget">No Budget</p>
+            <small *ngIf="currentBudget">{{ getBudgetPercentage().toFixed(1) }}% used</small>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Budget Progress -->
+  <ion-card *ngIf="currentUser && currentBudget" class="budget-card">
+    <ion-card-header>
+      <ion-card-title>Monthly Budget</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="budget-info">
+        <div class="budget-amounts">
+          <div class="amount-item">
+            <span class="label">Total Budget</span>
+            <span class="value">${{ currentBudget.total_budget.toFixed(2) }}</span>
+          </div>
+          <div class="amount-item">
+            <span class="label">Spent</span>
+            <span class="value spent">${{ currentBudget.spent.toFixed(2) }}</span>
+          </div>
+          <div class="amount-item">
+            <span class="label">Remaining</span>
+            <span class="value remaining">${{ currentBudget.remaining.toFixed(2) }}</span>
+          </div>
+        </div>
+        <div class="budget-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" 
+                 [style.width.%]="getBudgetPercentage()"
+                 [style.background-color]="getBudgetStatusColor() === 'danger' ? '#eb445a' : 
+                                           getBudgetStatusColor() === 'warning' ? '#ffc409' : '#2dd36f'">
+            </div>
+          </div>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Recent Transactions -->
+  <ion-card *ngIf="currentUser && todayExpenses.length > 0" class="transactions-card">
+    <ion-card-header>
+      <ion-card-title>Today's Transactions</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item *ngFor="let expense of todayExpenses.slice(0, 5)" lines="inset">
+        <ion-avatar slot="start">
+          <div class="expense-avatar">
+            <ion-icon name="card-outline"></ion-icon>
+          </div>
+        </ion-avatar>
+        <ion-label>
+          <h3>{{ expense.description }}</h3>
+          <p>{{ expense.date | date:'short' }}</p>
+        </ion-label>
+        <ion-chip color="danger" slot="end">
+          -${{ expense.amount.toFixed(2) }}
+        </ion-chip>
+      </ion-item>
+      
+      <ion-button *ngIf="todayExpenses.length > 5" 
+                  fill="clear" 
+                  expand="block" 
+                  routerLink="/tabs/expenses">
+        View All Transactions
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Quick Actions -->
+  <ion-card *ngIf="currentUser" class="actions-card">
+    <ion-card-header>
+      <ion-card-title>Quick Actions</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <ion-button expand="block" fill="outline" routerLink="/tabs/expenses">
+              <ion-icon name="add-outline" slot="start"></ion-icon>
+              Add Expense
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button expand="block" fill="outline" routerLink="/tabs/reports">
+              <ion-icon name="stats-chart-outline" slot="start"></ion-icon>
+              View Budget
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Loading indicator -->
+  <div *ngIf="isLoading" class="loading-section">
+    <ion-item>
+      <ion-label>Loading data...</ion-label>
+    </ion-item>
+  </div>
+</ion-content>

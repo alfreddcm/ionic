@@ -1,0 +1,117 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      <i class="fas fa-list"></i>
+      Transactions
+    </ion-title>
+  </ion-toolbar>
+  
+  
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="selectedSegment" (ionChange)="onSegmentChange($event)" value="all">
+      <ion-segment-button value="all">
+        <ion-label>All</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="expense">
+        <ion-label>Expenses</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="wallet_update">
+        <ion-label>Wallet</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+  
+  
+  <ion-toolbar>
+    <ion-item lines="none">
+      <ion-label>Filter by Wallet</ion-label>
+      <ion-select 
+        [(ngModel)]="selectedWallet" 
+        (ionChange)="onWalletFilterChange($event)"
+        interface="popover"
+        placeholder="All Wallets">
+        <ion-select-option value="all">All Wallets</ion-select-option>
+        <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.id">
+          {{ wallet.walletname }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="transactions-content">
+  
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="circles"></ion-spinner>
+    <p>Loading transactions...</p>
+  </div>
+
+  
+  <div *ngIf="!isLoading">
+    <ion-card *ngFor="let transaction of getFilteredTransactions()" class="transaction-card">
+      <ion-item>
+        <ion-label>
+          <h2>{{ transaction.walletname || 'Unknown Wallet' }}</h2>
+          <p *ngIf="['add_funds','deduct_funds','update_balance'].includes(transaction.transaction_type)" class="category-name">
+            <ion-icon name="pricetag-outline" size="small"></ion-icon>
+            {{ getWalletUpdateLabel(transaction) }}
+          </p>
+          <p *ngIf="transaction.transaction_type === 'expense' && transaction.category_name" class="category-name">
+            <ion-icon name="pricetag-outline" size="small"></ion-icon>
+            {{ transaction.category_name }}
+          </p>
+          <p *ngIf="transaction.note" class="transaction-note">{{ transaction.note }}</p>
+          <p class="transaction-date">{{ formatDate(transaction.created_at) }}</p>
+          
+          
+          <p *ngIf="['add_funds','deduct_funds','update_balance'].includes(transaction.transaction_type) && transaction.balance_before !== null && transaction.balance_before !== undefined && transaction.balance_after !== null && transaction.balance_after !== undefined" class="balance-change">
+            <span class="balance-before">₱{{ transaction.balance_before.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</span>
+            <ion-icon name="arrow-forward" class="arrow-icon"></ion-icon>
+            <span class="balance-after">₱{{ transaction.balance_after.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</span>
+          </p>
+          
+          
+          <p *ngIf="transaction.transaction_type === 'expense' && transaction.balance_after !== null && transaction.balance_after !== undefined" class="balance-info">
+            Balance after: <strong>₱{{ transaction.balance_after.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</strong>
+          </p>
+        </ion-label>
+        
+        <div slot="end" class="transaction-amount">
+          <span 
+            [class]="'amount ' + transaction.transaction_type"
+            [style.color]="transaction.transaction_type === 'expense' ? 'var(--ion-color-danger)' : 'var(--ion-color-success)'">
+            {{ formatAmount(transaction.amount, transaction.transaction_type) }}
+          </span>
+          <ion-badge 
+            [color]="getTransactionColor(transaction)" 
+            class="transaction-type-badge">
+            <div class="transaction-type">
+              {{ getTransactionTypeLabel(transaction.transaction_type) }}
+            </div>
+          </ion-badge>
+        </div>
+      </ion-item>
+    </ion-card>
+
+    
+    <ion-card *ngIf="getFilteredTransactions().length === 0" class="empty-state">
+      <ion-card-content class="text-center">
+        <ion-icon name="receipt-outline" size="large" color="medium"></ion-icon>
+        <h2>No Transactions</h2>
+        <p *ngIf="selectedSegment === 'all'">No transactions found. Start by adding expenses or wallet updates.</p>
+        <p *ngIf="selectedSegment === 'expense'">No expense transactions found.</p>
+        <p *ngIf="selectedSegment === 'wallet_update'">No wallet update transactions found.</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

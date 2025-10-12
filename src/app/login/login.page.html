@@ -1,0 +1,159 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>{{ isLoginMode ? 'Welcome Back' : 'Create Account' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="auth-content">
+  <div class="auth-container">
+    
+    <div class="brand-section">
+      <div class="logo-container">
+        <ion-icon name="wallet-outline" color="primary"></ion-icon>
+      </div>
+      <h1>Expense Tracker</h1>
+      <p>Your personal finance companion</p>
+    </div>
+
+    
+    <ion-card *ngIf="isLoginMode" class="auth-card">
+      <ion-card-header>
+        <ion-card-title>Sign In</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form (ngSubmit)="onLogin()">
+          <ion-item class="auth-item">
+            <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
+            <ion-input
+              type="text"
+              placeholder="Username or Email"
+              [(ngModel)]="loginForm.email"
+              name="email"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <ion-item class="auth-item">
+            <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
+            <ion-input
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Password"
+              [(ngModel)]="loginForm.password"
+              name="password"
+              required>
+            </ion-input>
+            <ion-button 
+              fill="clear" 
+              slot="end" 
+              (click)="togglePasswordVisibility()">
+              <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" color="medium"></ion-icon>
+            </ion-button>
+          </ion-item>
+
+          <ion-button
+            expand="block"
+            type="submit"
+            class="auth-button">
+            Sign In
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    
+    <ion-card *ngIf="!isLoginMode" class="auth-card">
+      <ion-card-header>
+        <ion-card-title>Create Account</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form (ngSubmit)="onRegister()">
+          <ion-item class="auth-item">
+            <ion-icon name="person-outline" slot="start" color="medium"></ion-icon>
+            <ion-input
+              type="text"
+              placeholder="Full Name"
+              [(ngModel)]="registerForm.fullname"
+              name="fullname"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <ion-item class="auth-item">
+            <ion-icon name="person-circle-outline" slot="start" color="medium"></ion-icon>
+            <ion-input
+              type="text"
+              placeholder="Username"
+              [(ngModel)]="registerForm.username"
+              name="username"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <ion-item class="auth-item">
+            <ion-icon name="mail-outline" slot="start" color="medium"></ion-icon>
+            <ion-input
+              type="email"
+              placeholder="Email"
+              [(ngModel)]="registerForm.email"
+              name="email"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <ion-item class="auth-item">
+            <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
+            <ion-input
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Password"
+              [(ngModel)]="registerForm.password"
+              name="password"
+              required>
+            </ion-input>
+            <ion-button 
+              fill="clear" 
+              slot="end" 
+              (click)="togglePasswordVisibility()">
+              <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" color="medium"></ion-icon>
+            </ion-button>
+          </ion-item>
+
+          <ion-item class="auth-item">
+            <ion-icon name="lock-closed-outline" slot="start" color="medium"></ion-icon>
+            <ion-input
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Confirm Password"
+              [(ngModel)]="registerForm.confirmPassword"
+              name="confirmPassword"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <ion-button
+            expand="block"
+            type="submit"
+            class="auth-button">
+            Create Account
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    
+    <div class="toggle-section">
+      <ion-text color="medium">
+        <p *ngIf="isLoginMode">
+          Don't have an account?
+          <ion-button fill="clear" color="primary" (click)="toggleMode()">
+            Sign Up
+          </ion-button>
+        </p>
+        <p *ngIf="!isLoginMode">
+          Already have an account?
+          <ion-button fill="clear" color="primary" (click)="toggleMode()">
+            Sign In
+          </ion-button>
+        </p>
+      </ion-text>
+    </div>
+  </div>
+</ion-content>

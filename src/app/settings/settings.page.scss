@@ -1,0 +1,228 @@
+// Settings Page Styles
+
+.settings-content {
+  --background: #f2f2f2;
+  
+  .profile-card {
+    margin: 20px 16px 16px;
+    
+    .profile-info {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+        margin-right: 20px;
+        background: var(--expense-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        i {
+          font-size: 48px;
+          color: white;
+        }
+      }
+      
+      .profile-details {
+        flex: 1;
+        
+        h2 {
+          margin: 0 0 4px 0;
+          font-size: 24px;
+          font-weight: 700;
+          color: #000000 !important;
+        }
+        
+        p {
+          margin: 0 0 4px 0;
+          color: #000000 !important;
+          font-size: 16px;
+          font-weight: 500;
+        }
+        
+        small {
+          color: #666666 !important;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+  
+  .settings-card,
+  .info-card {
+    margin: 16px;
+    
+    ion-card-header {
+      padding-bottom: 8px;
+      
+      ion-card-title {
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 700;
+        color: #000000;
+        
+        i {
+          margin-right: 12px;
+          font-size: 20px;
+          color: #2b6777;
+        }
+      }
+    }
+    
+    ion-list {
+      background: transparent;
+      
+      .settings-item,
+      .info-item {
+        --background: transparent;
+        --min-height: 60px;
+        --padding-start: 0;
+        --padding-end: 0;
+        --inner-padding-end: 0;
+        border-radius: 12px;
+        margin-bottom: 8px;
+        
+        &:hover {
+          --background: rgba(var(--expense-primary-rgb, 102, 126, 234), 0.1);
+        }
+        
+        i {
+          font-size: 20px;
+          color: var(--expense-primary);
+          margin-right: 16px;
+          width: 24px;
+          text-align: center;
+          
+          &[slot="end"] {
+            margin-right: 0;
+            margin-left: 16px;
+            color: var(--ion-color-medium);
+            font-size: 16px;
+          }
+        }
+        
+        ion-label {
+          h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+            color: #000000;
+          }
+          
+          p {
+            font-size: 14px;
+            color: #666666;
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+  
+  .logout-section {
+    padding: 20px 16px 100px;
+    
+    .logout-button {
+      --border-radius: var(--expense-radius-small);
+      --box-shadow: none;
+      --border-width: 2px;
+      --border-style: solid;
+      --border-color: var(--ion-color-danger);
+      height: 50px;
+      font-weight: 600;
+      
+      i {
+        margin-right: 8px;
+        font-size: 18px;
+      }
+      
+      &:hover {
+        --background: var(--ion-color-danger);
+        --color: white;
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .settings-content {
+    .profile-card {
+      margin: 16px 12px 12px;
+      
+      .profile-info {
+        .profile-avatar {
+          width: 60px;
+          height: 60px;
+          margin-right: 16px;
+          
+          i {
+            font-size: 36px;
+          }
+        }
+        
+        .profile-details {
+          h2 {
+            font-size: 20px;
+          }
+          
+          p {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+    
+    .settings-card,
+    .info-card {
+      margin: 12px;
+    }
+    
+    .logout-section {
+      padding: 16px 12px 100px;
+    }
+  }
+}
+
+// Dark mode removed - using light theme only
+
+// Animation delays for staggered effect
+.settings-card {
+  animation-delay: 0.1s;
+}
+
+.info-card {
+  animation-delay: 0.2s;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 0 16px 16px;
+  
+  ion-button {
+    flex: 1;
+  }
+}
+
+.error-message {
+  padding: 4px 16px 12px 16px;
+  
+  ion-text {
+    small {
+      font-size: 12px;
+      font-weight: 500;
+      display: block;
+      color: var(--ion-color-danger);
+    }
+  }
+}
+
+.logout-section {
+  animation: fadeIn 0.8s ease-out 0.3s both;
+}
