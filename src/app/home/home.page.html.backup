@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-title>
-      Expense Tracker
+      Expense Recorder
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -24,7 +24,7 @@
   </div>
 
   <div *ngIf="!currentUser" class="welcome-section">
-    <h2>Welcome to Expense Tracker</h2>
+    <h2>Welcome to Expense Recorder</h2>
     <p>Please login to continue</p>
   </div>
 

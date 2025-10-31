@@ -76,8 +76,8 @@
           
           <p *ngIf="['add_funds','deduct_funds','update_balance'].includes(transaction.transaction_type) && transaction.balance_before !== null && transaction.balance_before !== undefined && transaction.balance_after !== null && transaction.balance_after !== undefined" class="balance-change">
             <span class="balance-before">₱{{ transaction.balance_before.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</span>
-            <ion-icon name="arrow-forward" class="arrow-icon"></ion-icon>
-            <span class="balance-after">₱{{ transaction.balance_after.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</span>
+ >>>
+             <span class="balance-after">₱{{ transaction.balance_after.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</span>
           </p>
           
           
