@@ -1,0 +1,186 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>
+      <i class="fas fa-wallet"></i>
+      Wallet Management
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="presentWalletModal()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="wallet-content">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Wallet Management</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="circles"></ion-spinner>
+    <p>Loading wallets...</p>
+  </div>
+
+  
+  <div *ngIf="!isLoading">
+    <ion-card *ngFor="let wallet of wallets" class="wallet-card material-card slide-in-up">
+          <ion-card-header>
+            <ion-card-title>{{ wallet.walletname }}</ion-card-title>
+            <ion-card-subtitle>Balance: ₱{{ wallet.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</ion-card-subtitle>
+          </ion-card-header>      <ion-card-content>
+        <div class="wallet-actions">
+          <ion-button 
+            fill="outline" 
+            size="small" 
+            (click)="editWallet(wallet)">
+            <ion-icon name="pencil" slot="start"></ion-icon>
+            Edit
+          </ion-button>
+          
+          <ion-button 
+            fill="outline" 
+            size="small" 
+            color="danger"
+            (click)="deleteWallet(wallet)">
+            <ion-icon name="trash" slot="start"></ion-icon>
+            Delete
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    
+    <ion-card *ngIf="wallets.length === 0" class="empty-state material-card">
+      <ion-card-content class="text-center">
+        <ion-icon name="wallet-outline" size="large" color="medium"></ion-icon>
+        <h2>No Wallets Yet</h2>
+        <p>Create your first wallet to start managing your finances</p>
+        <ion-button (click)="presentWalletModal()" color="primary">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Add Wallet
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  
+  
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="presentWalletModal()" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+
+<ion-modal [isOpen]="isModalOpen" (willDismiss)="cancelModal()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>{{ editingWallet ? 'Edit Wallet' : 'Add Wallet' }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="cancelModal()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content class="ion-padding">
+      <form (ngSubmit)="saveWallet()">
+        
+        <ion-item>
+          <ion-label position="stacked">Wallet Name *</ion-label>
+          <ion-input
+            [(ngModel)]="walletForm.walletname"
+            name="walletname"
+            placeholder="Enter wallet name"
+            required>
+          </ion-input>
+        </ion-item>
+        
+        
+        <ion-item *ngIf="editingWallet">
+          <ion-label position="stacked">Current Balance</ion-label>
+          <ion-input
+            type="text"
+            [value]="'₱' + editingWallet.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})"
+            readonly>
+          </ion-input>
+        </ion-item>
+        
+        
+        <ion-item *ngIf="!editingWallet">
+          <ion-label position="stacked">Initial Amount *</ion-label>
+          <ion-input
+            type="number"
+            [(ngModel)]="walletForm.amount"
+            name="amount"
+            placeholder="0.00"
+            step="0.01"
+            required>
+          </ion-input>
+        </ion-item>
+
+        
+        <div *ngIf="editingWallet" class="fund-management">
+          <ion-label class="fund-management-label">Fund Management</ion-label>
+          
+          
+          <ion-radio-group [(ngModel)]="fundAction" name="fundAction" (ionChange)="onFundActionChange()">
+            <ion-item>
+              <ion-radio slot="start" value="update"></ion-radio>
+              <ion-label>Update Balance</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-radio slot="start" value="add"></ion-radio>
+              <ion-label>Add Funds</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-radio slot="start" value="deduct"></ion-radio>
+              <ion-label>Deduct Funds</ion-label>
+            </ion-item>
+          </ion-radio-group>
+
+          
+          <ion-item>
+            <ion-label position="stacked">
+              {{ fundAction === 'update' ? 'New Balance' : 'Amount' }} *
+            </ion-label>
+            <ion-input
+              type="number"
+              [(ngModel)]="walletForm.amount"
+              name="fundAmount"
+              placeholder="0.00"
+              step="0.01"
+              required>
+            </ion-input>
+          </ion-item>
+
+           <ion-item *ngIf="editingWallet && walletForm.amount && walletForm.amount !== '' && getNewBalancePreview() !== null" class="balance-preview">
+            <ion-label>
+              <h3>Balance Change:</h3>
+              <p class="preview-amount">
+                <span class="balance-before">₱{{ editingWallet.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</span>
+                <ion-icon name="arrow-forward" class="arrow-icon"></ion-icon>
+                <span class="balance-after" [class.positive]="getNewBalancePreview()! > editingWallet.amount" [class.negative]="getNewBalancePreview()! < editingWallet.amount">₱{{ getNewBalancePreview()?.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</span>
+              </p>
+            </ion-label>
+          </ion-item>
+        </div>
+        
+        <div class="modal-buttons">
+          <ion-button type="button" fill="outline" (click)="cancelModal()">
+            Cancel
+          </ion-button>
+          <ion-button type="submit" color="primary">
+            {{ editingWallet ? 'Save Changes' : 'Create' }}
+          </ion-button>
+        </div>
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>

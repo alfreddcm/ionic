@@ -1,0 +1,277 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Expense Recorder</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="home-content">
+  
+  <div class="welcome-header">
+    <div class="user-info">
+      <div class="avatar-circle">
+        <ion-icon name="person"></ion-icon>
+      </div>
+      <div class="user-details">
+        <h3>Welcome back,</h3>
+        <h2>{{userName}}!</h2>
+      </div>
+    </div>
+    <div class="total-balance">
+      <p class="balance-label">Today's Expenses</p>
+      <h1 class="balance-amount">₱{{todaysExpenses | number:'1.2-2':'en-US'}}</h1>
+    </div>
+  </div>
+
+  
+  <div class="stats-cards">
+    <div class="stat-card expense-stat">
+      <div class="stat-icon">
+        <ion-icon name="trending-down"></ion-icon>
+      </div>
+      <div class="stat-info">
+        <p class="stat-label">Total Expenses</p>
+        <h3 class="stat-value">₱{{todaysExpenses | number:'1.2-2':'en-US'}}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card budget-stat" (click)="editBudget()">
+      <div class="stat-icon">
+        <ion-icon name="trending-up"></ion-icon>
+      </div>
+      <div class="stat-info">
+        <p class="stat-label">Daily Budget</p>
+        <h3 class="stat-value">₱{{dailyBudget | number:'1.2-2':'en-US'}}</h3>
+      </div>
+      <ion-icon name="create-outline" class="edit-badge"></ion-icon>
+    </div>
+  </div>
+
+  
+  <ion-card *ngIf="showBudgetWarning" class="warning-banner">
+    <ion-icon name="warning" class="warning-icon"></ion-icon>
+    <div class="warning-text">
+      <strong>Budget Alert!</strong>
+      <p>You've exceeded your daily budget</p>
+    </div>
+  </ion-card>
+
+  
+  <div class="wallets-section">
+    <div class="section-header">
+      <h3>
+        <ion-icon name="wallet"></ion-icon>
+        My Wallets
+      </h3>
+      <ion-button *ngIf="wallets.length > 0" size="small" fill="clear" (click)="manageWallets()">
+        <ion-icon name="settings-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+    
+    <div *ngIf="wallets.length === 0" class="empty-state">
+      <ion-icon name="wallet-outline" class="empty-icon"></ion-icon>
+      <h4>No Wallets Yet</h4>
+      <p>Create your first wallet to start tracking expenses</p>
+      <ion-button expand="block" (click)="createFirstWallet()">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Create Wallet
+      </ion-button>
+    </div>
+
+    <div *ngIf="wallets.length > 0" class="wallets-list">
+      <div *ngFor="let wallet of wallets" class="wallet-card">
+        <div class="wallet-icon" [style.background]="getWalletGradient(wallet.walletname)">
+          <ion-icon name="wallet"></ion-icon>
+        </div>
+        <div class="wallet-details">  
+          <h4 class="wallet-name">{{wallet.walletname}}</h4>
+          <p class="wallet-balance">₱{{wallet.amount | number:'1.2-2':'en-US'}}</p>
+        </div>
+        <div class="wallet-arrow">
+          <ion-icon name="chevron-forward"></ion-icon>
+        </div>
+      </div>
+    </div>
+
+    <ion-button *ngIf="wallets.length > 0" expand="block" fill="outline" (click)="manageWallets()" class="manage-btn">
+      <ion-icon name="settings-outline" slot="start"></ion-icon>
+      Manage Wallets
+    </ion-button>
+  </div>
+
+  
+  <div *ngIf="wallets.length > 0" class="expense-section">
+    <div class="section-header">
+      <h3>
+        <ion-icon name="receipt"></ion-icon>
+        Record Expense
+      </h3>
+    </div>
+
+    <div class="input-card combined-card">
+      <div class="select-group">
+        <div class="input-label">
+          <ion-icon name="wallet"></ion-icon>
+          <span>Select Wallet</span>
+        </div>
+        <ion-select 
+          [(ngModel)]="selectedWalletId" 
+          placeholder="Choose a wallet" 
+          interface="action-sheet"
+          (ionChange)="onWalletChange()"
+          class="modern-select">
+          <ion-select-option *ngFor="let wallet of wallets" [value]="wallet.id">
+            {{wallet.walletname}} (₱{{wallet.amount | number:'1.2-2':'en-US'}})
+          </ion-select-option>
+        </ion-select>
+        
+      </div>
+ <br>
+      <div class="select-group">
+        <div class="input-label">
+          <ion-icon name="pricetag"></ion-icon>
+          <span>Category</span>
+        </div>
+        <ion-select 
+          [(ngModel)]="selectedCategory" 
+          placeholder="Choose category"
+          interface="action-sheet"
+          class="modern-select">
+          <ion-select-option value="food">🍔 Food</ion-select-option>
+          <ion-select-option value="transport">🚗 Transport</ion-select-option>
+          <ion-select-option value="entertainment">🎬 Entertainment</ion-select-option>
+          <ion-select-option value="shopping">🛍️ Shopping</ion-select-option>
+          <ion-select-option value="bills">📄 Bills</ion-select-option>
+          <ion-select-option value="other">📌 Other</ion-select-option>
+        </ion-select>
+      
+      </div>
+    </div>
+
+    <div class="input-card amount-card">
+      <div class="input-label">
+        <ion-icon name="cash"></ion-icon>
+        <span>Amount</span>
+      </div>
+      <div class="amount-input-wrapper">
+        <span class="currency-symbol">₱</span>
+        <input 
+          type="text" 
+          inputmode="decimal"
+          [(ngModel)]="displayAmount" 
+          (input)="onAmountInput($event)"
+          (keypress)="onAmountKeypress($event)"
+          class="amount-input-field"
+          placeholder="0.00">
+      </div>
+    </div>
+
+    <div class="input-card">
+      <div class="input-label">
+        <ion-icon name="document-text"></ion-icon>
+        <span>Note (optional)</span>
+      </div>
+      <input 
+        type="text"
+        [(ngModel)]="expenseNote" 
+        placeholder="Enter description"
+        maxlength="255"
+        class="note-input-field">
+    </div>
+
+    <ion-button 
+      expand="block" 
+      [class]="'record-expense-btn' + (expenseAmount && expenseAmount > 0 ? ' has-amount' : '')"
+      (click)="addExpense()"
+      [disabled]="!selectedWallet || !expenseAmount || expenseAmount <= 0">
+      <ion-icon name="add-circle" slot="start"></ion-icon>
+      Record Expense
+    </ion-button>
+  </div>
+
+  
+  <ion-modal [isOpen]="showBudgetModal" (didDismiss)="showBudgetModal = false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Edit Daily Budget</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="showBudgetModal = false">
+              <ion-icon name="close"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <div class="modal-content">
+          <ion-item>
+            <ion-label position="stacked">Daily Budget Amount</ion-label>
+            <ion-input 
+              type="number" 
+              [(ngModel)]="newBudgetAmount" 
+              placeholder="0.00"
+              min="0"
+              step="0.01">
+            </ion-input>
+          </ion-item>
+          
+          <div class="modal-buttons">
+            <ion-button expand="block" color="medium" fill="outline" (click)="showBudgetModal = false">
+              Cancel
+            </ion-button>
+            <ion-button expand="block" color="primary" (click)="saveBudget()">
+              Save Budget
+            </ion-button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  
+  <ion-modal [isOpen]="showWalletModal" (didDismiss)="showWalletModal = false">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{walletModalMode === 'create' ? 'Create Wallet' : 'Edit Wallet'}}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="showWalletModal = false">
+              <ion-icon name="close"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <div class="modal-content">
+          <ion-item>
+            <ion-label position="stacked">Wallet Name</ion-label>
+            <ion-input 
+              [(ngModel)]="walletFormData.walletname" 
+              placeholder="e.g., Cash, Card, E-Money"
+              maxlength="100">
+            </ion-input>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label position="stacked">Initial Amount</ion-label>
+            <ion-input 
+              type="number" 
+              [(ngModel)]="walletFormData.amount" 
+              placeholder="0.00"
+              min="0"
+              step="0.01">
+            </ion-input>
+          </ion-item>
+          
+          <div class="modal-buttons">
+            <ion-button expand="block" color="medium" fill="outline" (click)="showWalletModal = false">
+              Cancel
+            </ion-button>
+            <ion-button expand="block" color="primary" (click)="saveWallet()">
+              {{walletModalMode === 'create' ? 'Create Wallet' : 'Save Changes'}}
+            </ion-button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

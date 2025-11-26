@@ -1,0 +1,38 @@
+# Build outputs
+dist/
+www/
+build/
+
+# Dependencies
+node_modules/
+
+# Angular cache
+.angular/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Environment
+.env
+.env.local
+
+# Testing
+coverage/
+
+# Capacitor
+.capacitor/
+android/
+ios/

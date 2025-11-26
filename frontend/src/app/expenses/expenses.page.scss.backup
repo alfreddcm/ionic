@@ -1,0 +1,402 @@
+// Add Expense Page Styles (now Wallet Management)
+
+.wallet-content {
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    
+    ion-spinner {
+      margin-bottom: 20px;
+    }
+    
+    p {
+      color: var(--ion-color-medium);
+      font-size: 16px;
+    }
+  }
+  
+  .wallet-card {
+    margin: 16px;
+    
+    .wallet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      
+      .wallet-info {
+        flex: 1;
+        
+        ion-card-title {
+          font-size: 20px;
+          font-weight: 600;
+          color: var(--ion-color-dark);
+          margin-bottom: 4px;
+        }
+        
+        ion-card-subtitle {
+          font-size: 16px;
+          color: var(--ion-color-success);
+          font-weight: 500;
+        }
+      }
+      
+      .wallet-status {
+        ion-badge {
+          font-size: 12px;
+          padding: 6px 12px;
+        }
+      }
+    }
+    
+    .wallet-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      
+      ion-button {
+        flex: 1;
+        min-width: 80px;
+        
+        ion-icon {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+  
+  .empty-state {
+    margin: 40px 16px;
+    text-align: center;
+    
+    ion-card-content {
+      padding: 40px 20px;
+      
+      ion-icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+        opacity: 0.6;
+      }
+      
+      h2 {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        margin-bottom: 8px;
+      }
+      
+      p {
+        font-size: 16px;
+        color: var(--ion-color-medium);
+        margin-bottom: 24px;
+      }
+    }
+  }
+}
+
+// Modal styles
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 0 16px 16px;
+  
+  ion-button {
+    flex: 1;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+  .expense-form-card {
+    margin: 20px 16px 16px;
+    
+    ion-card-header {
+      ion-card-title {
+        display: flex;
+        align-items: center;
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        
+        i {
+          margin-right: 12px;
+          color: var(--expense-primary);
+        }
+      }
+    }
+    
+    .material-input {
+      --background: rgba(var(--ion-color-light-rgb), 0.5);
+      --border-radius: var(--expense-radius-small);
+      --padding-start: 16px;
+      --padding-end: 16px;
+      border-radius: var(--expense-radius-small);
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+      
+      i {
+        color: var(--expense-primary);
+        font-size: 20px;
+        margin-right: 12px;
+        width: 24px;
+        text-align: center;
+      }
+      
+      ion-label {
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        
+        &[position="stacked"] {
+          margin-bottom: 8px;
+          font-size: 14px;
+        }
+      }
+      
+      ion-input,
+      ion-textarea,
+      ion-select {
+        --padding-start: 8px;
+        font-size: 16px;
+      }
+      
+      &[button] {
+        cursor: pointer;
+        
+        &:hover {
+          --background: rgba(var(--expense-primary-rgb, 102, 126, 234), 0.1);
+        }
+      }
+    }
+    
+    .action-buttons {
+      margin-top: 24px;
+      
+      .material-button {
+        --border-radius: var(--expense-radius-small);
+        --box-shadow: var(--expense-shadow);
+        height: 50px;
+        font-weight: 600;
+        
+        i {
+          margin-right: 8px;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+  
+  .quick-categories-card {
+    margin: 16px;
+    
+    ion-card-header {
+      ion-card-title {
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        
+        i {
+          margin-right: 12px;
+          color: var(--expense-warning);
+        }
+      }
+    }
+    
+    .quick-category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 8px;
+      border-radius: var(--expense-radius-small);
+      background: rgba(var(--expense-primary-rgb, 102, 126, 234), 0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 8px;
+      
+      &:hover {
+        background: rgba(var(--expense-primary-rgb, 102, 126, 234), 0.2);
+        transform: translateY(-2px);
+      }
+      
+      &:active {
+        transform: scale(0.95);
+      }
+      
+      i {
+        font-size: 24px;
+        color: var(--expense-primary);
+        margin-bottom: 8px;
+      }
+      
+      span {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        text-align: center;
+        line-height: 1.2;
+      }
+    }
+  }
+  
+  .login-prompt-card {
+    margin: 16px;
+    
+    .login-prompt {
+      text-align: center;
+      padding: 20px;
+      
+      i {
+        font-size: 48px;
+        color: var(--expense-warning);
+        margin-bottom: 16px;
+      }
+      
+      h3 {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        margin: 0 0 8px 0;
+      }
+      
+      p {
+        color: var(--ion-color-medium);
+        margin: 0 0 20px 0;
+        font-size: 16px;
+      }
+      
+      .material-button {
+        --border-radius: var(--expense-radius-small);
+        --box-shadow: var(--expense-shadow);
+        height: 50px;
+        font-weight: 600;
+        
+        i {
+          margin-right: 8px;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+// Wallet Management Styles
+.wallet-content {
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    
+    ion-spinner {
+      margin-bottom: 20px;
+    }
+    
+    p {
+      color: var(--ion-color-medium);
+      font-size: 16px;
+    }
+  }
+  
+  .wallet-card {
+    margin: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    .wallet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      
+      .wallet-info {
+        flex: 1;
+        
+        ion-card-title {
+          font-size: 18px;
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+        
+        ion-card-subtitle {
+          font-size: 14px;
+          color: var(--ion-color-success);
+          font-weight: 500;
+        }
+      }
+      
+      .wallet-status {
+        margin-top: 4px;
+      }
+    }
+    
+    .wallet-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      
+      ion-button {
+        flex: 1;
+        min-width: 80px;
+        height: 36px;
+        
+        ion-icon {
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+  
+  .empty-state {
+    margin: 32px 16px;
+    text-align: center;
+    padding: 40px 20px;
+    
+    ion-icon {
+      margin-bottom: 16px;
+    }
+    
+    h2 {
+      margin-bottom: 8px;
+      color: var(--ion-color-dark);
+    }
+    
+    p {
+      color: var(--ion-color-medium);
+      margin-bottom: 24px;
+    }
+  }
+}
+
+// Modal styles
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  
+  ion-button {
+    flex: 1;
+  }
+}
+
+// Animation for wallet cards
+.wallet-card {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,241 @@
+// Wallet Management Page Styles
+
+.wallet-content {
+  --background: #f2f2f2;
+  
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    
+    ion-spinner {
+      margin-bottom: 20px;
+    }
+    
+    p {
+      color: #666666;
+      font-size: 16px;
+    }
+  }
+  
+  .wallet-card {
+    margin: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    .wallet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      
+      .wallet-info {
+        flex: 1;
+        
+        ion-card-title {
+          font-size: 20px;
+          font-weight: 600;
+          color: var(--ion-color-dark);
+          margin-bottom: 4px;
+        }
+        
+        ion-card-subtitle {
+          font-size: 16px;
+          color: var(--ion-color-success);
+          font-weight: 500;
+        }
+      }
+      
+      .wallet-status {
+        ion-badge {
+          font-size: 12px;
+          padding: 6px 12px;
+        }
+      }
+    }
+    
+    .wallet-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+      
+      ion-button {
+        flex: 1;
+        min-width: 80px;
+        
+        ion-icon {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+  
+  .empty-state {
+    margin: 40px 16px;
+    text-align: center;
+    
+    ion-card-content {
+      padding: 40px 20px;
+      
+      ion-icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+        opacity: 0.6;
+      }
+      
+      h2 {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        margin-bottom: 8px;
+      }
+      
+      p {
+        font-size: 16px;
+        color: #666666;
+        margin-bottom: 24px;
+      }
+    }
+  }
+}
+
+// Modal styles
+.balance-preview {
+  --background: #f5f5f5;
+  margin: 16px 0;
+  border-radius: 8px;
+  padding: 8px 0;
+  
+  h3 {
+    font-size: 14px;
+    color: #000000;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  
+  .preview-amount {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    padding: 8px 12px;
+    background: #ffffff;
+    border-radius: 6px;
+    width: fit-content;
+    
+    .balance-before {
+      color: #000000;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    
+    .arrow-icon {
+      font-size: 22px;
+      color: #2b6777;
+      margin: 0 4px;
+    }
+    
+    .balance-after {
+      font-weight: 700;
+      font-size: 18px;
+      
+      &.positive {
+        color: #52ab98;
+      }
+      
+      &.negative {
+        color: var(--ion-color-danger);
+      }
+    }
+  }
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 0 16px 16px;
+  
+  ion-button {
+    flex: 1;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+// Animation for wallet cards
+.wallet-card {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Animation delays for staggered effect
+.wallet-card:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.wallet-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.wallet-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+// Fund Management Styles
+.fund-management {
+  margin: 20px 0;
+  padding: 16px;
+  background: var(--ion-color-light);
+  border-radius: 8px;
+  
+  .fund-management-label {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--ion-color-dark);
+    margin-bottom: 12px;
+    display: block;
+  }
+  
+  ion-radio-group {
+    ion-item {
+      --padding-start: 0;
+      margin-bottom: 8px;
+      
+      ion-label {
+        font-size: 14px;
+        margin-left: 8px;
+      }
+    }
+  }
+}
+
+// Floating Action Button
+ion-fab {
+  margin: 16px;
+  
+  ion-fab-button {
+    --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    
+    &:hover {
+      transform: scale(1.05);
+      transition: transform 0.2s ease;
+    }
+  }
+}
