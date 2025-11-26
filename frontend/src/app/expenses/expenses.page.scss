@@ -1,7 +1,7 @@
 // Wallet Management Page Styles
 
 .wallet-content {
-  --background: #f2f2f2;
+  --background: #f5f7fa;
   
   .loading-container {
     display: flex;
@@ -17,6 +17,154 @@
     p {
       color: #666666;
       font-size: 16px;
+    }
+  }
+  
+  .wallets-section {
+    margin: 16px;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(43, 103, 119, 0.08);
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+
+      h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #000000;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        ion-icon {
+          font-size: 24px;
+          color: #2b6777;
+        }
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+
+      .empty-icon {
+        font-size: 64px;
+        color: #cbd5e1;
+        margin-bottom: 16px;
+      }
+
+      h4 {
+        margin: 0 0 8px;
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #1e293b;
+      }
+
+      p {
+        margin: 0 0 24px;
+        font-size: 0.875rem;
+        color: #64748b;
+        line-height: 1.5;
+      }
+
+      ion-button {
+        --border-radius: 12px;
+        --padding-start: 24px;
+        --padding-end: 24px;
+        font-weight: 600;
+      }
+    }
+
+    .wallets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .wallet-item {
+      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+
+      &:active {
+        transform: scale(0.98);
+        background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+      }
+
+      .wallet-card-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 12px;
+
+        .wallet-icon-wrapper {
+          width: 56px;
+          height: 56px;
+          border-radius: 14px;
+          background: linear-gradient(135deg, #2b6777, #52ab98);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          box-shadow: 0 4px 12px rgba(43, 103, 119, 0.25);
+
+          ion-icon {
+            font-size: 28px;
+            color: white;
+          }
+        }
+
+        .wallet-info {
+          flex: 1;
+          min-width: 0;
+
+          .wallet-name {
+            margin: 0 0 4px;
+            font-size: 1.063rem;
+            font-weight: 600;
+            color: #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .wallet-balance {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2b6777;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+
+      .wallet-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        padding-top: 8px;
+        border-top: 1px solid #e2e8f0;
+
+        ion-button {
+          --padding-start: 12px;
+          --padding-end: 12px;
+          margin: 0;
+
+          ion-icon {
+            font-size: 20px;
+          }
+        }
+      }
     }
   }
   

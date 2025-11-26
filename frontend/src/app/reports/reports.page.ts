@@ -202,7 +202,7 @@ export class ReportsPage implements OnInit {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
-    return `${prefix}$${formattedAmount}`;
+    return `${prefix}₱${formattedAmount}`;
   }
 
   formatDate(dateString: string): string {

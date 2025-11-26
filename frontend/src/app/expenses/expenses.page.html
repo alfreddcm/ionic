@@ -1,72 +1,62 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
-    <ion-title>
-      <i class="fas fa-wallet"></i>
-      Wallet Management
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="presentWalletModal()">
-        <ion-icon name="add"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ion-title>Wallet Management</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="wallet-content">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Wallet Management</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  
   <div *ngIf="isLoading" class="loading-container">
     <ion-spinner name="circles"></ion-spinner>
     <p>Loading wallets...</p>
   </div>
 
-  
-  <div *ngIf="!isLoading">
-    <ion-card *ngFor="let wallet of wallets" class="wallet-card material-card slide-in-up">
-          <ion-card-header>
-            <ion-card-title>{{ wallet.walletname }}</ion-card-title>
-            <ion-card-subtitle>Balance: ₱{{ wallet.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</ion-card-subtitle>
-          </ion-card-header>      <ion-card-content>
+  <div *ngIf="!isLoading" class="wallets-section">
+    <div class="section-header">
+      <h3>
+        <ion-icon name="wallet"></ion-icon>
+        My Wallets
+      </h3>
+    </div>
+
+    <div *ngIf="wallets.length === 0" class="empty-state">
+      <ion-icon name="wallet-outline" class="empty-icon"></ion-icon>
+      <h4>No Wallets Yet</h4>
+      <p>Create your first wallet to start managing your finances</p>
+      <ion-button expand="block" (click)="presentWalletModal()">
+        <ion-icon name="add" slot="start"></ion-icon>
+        Create Wallet
+      </ion-button>
+    </div>
+
+    <div *ngIf="wallets.length > 0" class="wallets-grid">
+      <div *ngFor="let wallet of wallets" class="wallet-item">
+        <div class="wallet-card-header">
+          <div class="wallet-icon-wrapper" [style.background]="getWalletGradient(wallet.walletname)">
+            <ion-icon name="wallet"></ion-icon>
+          </div>
+          <div class="wallet-info">
+            <h4 class="wallet-name">{{ wallet.walletname }}</h4>
+            <p class="wallet-balance">₱{{ wallet.amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</p>
+          </div>
+        </div>
         <div class="wallet-actions">
           <ion-button 
-            fill="outline" 
+            fill="clear" 
             size="small" 
             (click)="editWallet(wallet)">
-            <ion-icon name="pencil" slot="start"></ion-icon>
-            Edit
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
           </ion-button>
-          
           <ion-button 
-            fill="outline" 
+            fill="clear" 
             size="small" 
             color="danger"
             (click)="deleteWallet(wallet)">
-            <ion-icon name="trash" slot="start"></ion-icon>
-            Delete
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
           </ion-button>
         </div>
-      </ion-card-content>
-    </ion-card>
-
-    
-    <ion-card *ngIf="wallets.length === 0" class="empty-state material-card">
-      <ion-card-content class="text-center">
-        <ion-icon name="wallet-outline" size="large" color="medium"></ion-icon>
-        <h2>No Wallets Yet</h2>
-        <p>Create your first wallet to start managing your finances</p>
-        <ion-button (click)="presentWalletModal()" color="primary">
-          <ion-icon name="add" slot="start"></ion-icon>
-          Add Wallet
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
+      </div>
+    </div>
   </div>
-  
   
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="presentWalletModal()" color="primary">
@@ -74,7 +64,6 @@
     </ion-fab-button>
   </ion-fab>
 </ion-content>
-
 
 <ion-modal [isOpen]="isModalOpen" (willDismiss)="cancelModal()">
   <ng-template>
@@ -91,7 +80,6 @@
     
     <ion-content class="ion-padding">
       <form (ngSubmit)="saveWallet()">
-        
         <ion-item>
           <ion-label position="stacked">Wallet Name *</ion-label>
           <ion-input
@@ -102,7 +90,6 @@
           </ion-input>
         </ion-item>
         
-        
         <ion-item *ngIf="editingWallet">
           <ion-label position="stacked">Current Balance</ion-label>
           <ion-input
@@ -111,7 +98,6 @@
             readonly>
           </ion-input>
         </ion-item>
-        
         
         <ion-item *ngIf="!editingWallet">
           <ion-label position="stacked">Initial Amount *</ion-label>
@@ -125,10 +111,8 @@
           </ion-input>
         </ion-item>
 
-        
         <div *ngIf="editingWallet" class="fund-management">
           <ion-label class="fund-management-label">Fund Management</ion-label>
-          
           
           <ion-radio-group [(ngModel)]="fundAction" name="fundAction" (ionChange)="onFundActionChange()">
             <ion-item>
@@ -145,7 +129,6 @@
             </ion-item>
           </ion-radio-group>
 
-          
           <ion-item>
             <ion-label position="stacked">
               {{ fundAction === 'update' ? 'New Balance' : 'Amount' }} *
@@ -160,7 +143,7 @@
             </ion-input>
           </ion-item>
 
-           <ion-item *ngIf="editingWallet && walletForm.amount && walletForm.amount !== '' && getNewBalancePreview() !== null" class="balance-preview">
+          <ion-item *ngIf="editingWallet && walletForm.amount && walletForm.amount !== '' && getNewBalancePreview() !== null" class="balance-preview">
             <ion-label>
               <h3>Balance Change:</h3>
               <p class="preview-amount">

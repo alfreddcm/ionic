@@ -63,11 +63,11 @@
         <ion-label>
           <h2>{{ transaction.walletname || 'Unknown Wallet' }}</h2>
           <p *ngIf="['add_funds','deduct_funds','update_balance'].includes(transaction.transaction_type)" class="category-name">
-            <ion-icon name="pricetag-outline" size="small"></ion-icon>
+            <ion-icon name="pricetags-outline" size="small"></ion-icon>
             {{ getWalletUpdateLabel(transaction) }}
           </p>
           <p *ngIf="transaction.transaction_type === 'expense' && transaction.category_name" class="category-name">
-            <ion-icon name="pricetag-outline" size="small"></ion-icon>
+            <ion-icon name="pricetags-outline" size="small"></ion-icon>
             {{ transaction.category_name }}
           </p>
           <p *ngIf="transaction.note" class="transaction-note">{{ transaction.note }}</p>

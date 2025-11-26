@@ -6,11 +6,6 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardSubtitle,
   IonItem,
   IonLabel,
   IonInput,
@@ -51,11 +46,6 @@ interface Wallet {
     IonToolbar,
     IonTitle,
     IonContent,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardSubtitle,
     IonItem,
     IonLabel,
     IonInput,
@@ -121,7 +111,6 @@ export class ExpensesPage implements OnInit {
         this.wallets = response.data;
       }
     } catch (error) {
-      console.error('Error loading wallets:', error);
       await this.showToast('Error loading wallets', 'danger');
     } finally {
       this.isLoading = false;
@@ -255,7 +244,6 @@ export class ExpensesPage implements OnInit {
         await this.showToast('Failed to save wallet', 'danger');
       }
     } catch (error) {
-      console.error('Error saving wallet:', error);
       await this.showToast('Error saving wallet', 'danger');
     } finally {
       await loading.dismiss();
@@ -304,7 +292,6 @@ export class ExpensesPage implements OnInit {
         await this.showToast('Failed to delete wallet', 'danger');
       }
     } catch (error) {
-      console.error('Error deleting wallet:', error);
       await this.showToast('Error deleting wallet', 'danger');
     } finally {
       await loading.dismiss();
@@ -366,5 +353,28 @@ export class ExpensesPage implements OnInit {
       position: 'top'
     });
     await toast.present();
+  }
+
+  getWalletGradient(walletName: string): string {
+    const gradients = [
+      'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+      'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+      'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+      'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+      'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+      'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+      'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)',
+      'linear-gradient(135deg, #fdcbf1 0%, #e6dee9 100%)',
+    ];
+    
+    let hash = 0;
+    for (let i = 0; i < walletName.length; i++) {
+      hash = walletName.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    const index = Math.abs(hash) % gradients.length;
+    return gradients[index];
   }
 }
