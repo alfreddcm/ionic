@@ -1,6 +1,23 @@
 {
+  "name": "expense-recorder-fullstack",
+  "version": "1.0.0",
+  "description": "Ionic + CodeIgniter Full-Stack Expense Recorder",
+  "scripts": {
+    "postinstall": "node scripts/setup.js",
+    "setup": "node scripts/setup.js",
+    "validate": "node scripts/validate.js",
+    "install:frontend": "npm --prefix frontend install",
+    "install:backend": "composer install --working-dir=backend",
+    "install:all": "npm run install:frontend & npm run install:backend",
+    "start:frontend": "npm --prefix frontend start",
+    "start:backend": "php -S localhost:8080 -t backend/public",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "build:frontend": "npm --prefix frontend run build",
+    "test:frontend": "npm --prefix frontend test"
+  },
   "devDependencies": {
-    "@angular/cli": "^20.3.4"
+    "@angular/cli": "^20.3.4",
+    "concurrently": "^9.1.0"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.1.0",

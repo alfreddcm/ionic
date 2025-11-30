@@ -1,0 +1,19 @@
+
+npm install -g @ionic/cli @angular/cli
+```
+ 
+# Frontend
+cd frontend
+npm install
+
+# Backend
+cd backend
+composer install
+```
+
+1. Create database: `expense_recorder`
+2. Import SQL: `backend/database/expense_recorder.sql`
+3. Configure: `backend/.env`
+
+
+Ctrl+Shift+P → Tasks: Run Task → Start Both Servers

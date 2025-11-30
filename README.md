@@ -1,216 +1,328 @@
-# Ionic + CodeIgniter Full-Stack Development Environment
+# Expense Recorder - Ionic + CodeIgniter Full-Stack Application
 
-This project combines Ionic Framework (Angular) for the mobile frontend with CodeIgniter 4 for the backend API, creating a complete full-stack development environment.
+This is a full-stack expense tracking application combining Ionic Framework (Angular) for the mobile frontend with CodeIgniter 4 for the backend API.
 
-## Project Structure
+## 🚀 Quick Setup (Portable Installation)
+
+This project is designed to work seamlessly on any computer after transferring. Just follow these steps:
+
+### Prerequisites
+
+Ensure you have the following installed:
+- **Node.js** (v16 or higher) - [Download](https://nodejs.org/)
+- **PHP** (v7.4 or higher) - [Download](https://www.php.net/downloads)
+- **Composer** - [Download](https://getcomposer.org/)
+- **MySQL/MariaDB** - [Download](https://www.mysql.com/downloads/)
+
+### One-Command Setup
+
+1. **Clone or copy this project** to your computer
+2. **Run the automated setup**:
+   ```bash
+   npm install
+   ```
+
+That's it! The setup script will automatically:
+- ✅ Create environment configuration files from templates
+- ✅ Install frontend (Ionic/Angular) dependencies
+- ✅ Install backend (CodeIgniter/PHP) dependencies
+- ✅ Configure the project for your local environment
+
+### Manual Setup (If Automated Setup Fails)
+
+If the automated setup doesn't work, follow these manual steps:
+
+**Step 1: Setup Environment Files**
+```bash
+# Backend
+cd backend
+copy .env.example .env
+composer install
+
+# Frontend
+cd ../frontend
+copy .env.example .env
+npm install
+```
+
+**Step 2: Configure Database**
+1. Create a database named `expense_recorder` in MySQL
+2. Import the database schema:
+   ```bash
+   mysql -u root -p expense_recorder < expense_tracker.sql
+   ```
+3. Edit `backend/.env` and update database credentials:
+   ```env
+   database.default.hostname = localhost
+   database.default.database = expense_recorder
+   database.default.username = root
+   database.default.password = your_password
+   ```
+
+**Step 3: Configure API URL (if using different port)**
+If your backend runs on a different port, update `frontend/src/environments/environment.ts`:
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8080/api'  // Change port if needed
+};
+```
+
+## 🎮 Running the Application
+
+### Option 1: Start Both Servers Together
+```bash
+npm start
+```
+
+### Option 2: Start Servers Separately
+
+**Terminal 1 - Backend:**
+```bash
+npm run start:backend
+# or manually: cd backend && php spark serve
+```
+
+**Terminal 2 - Frontend:**
+```bash
+npm run start:frontend
+# or manually: cd frontend && npm start
+```
+
+### Access the Application
+- **Frontend App**: http://localhost:8100
+- **Backend API**: http://localhost:8080
+
+## 📁 Project Structure
 
 ```
 ├── frontend/          # Ionic Angular mobile app
 │   ├── src/
-│   │   ├── app/
-│   │   │   ├── home/           # Home page with API demo
-│   │   │   ├── services/       # API service for backend communication
-│   │   │   └── ...
+│   │   ├── app/              # Application modules and components
+│   │   ├── environments/     # Environment configurations (dev/prod)
 │   │   └── ...
-│   ├── package.json
-│   └── ionic.config.json
+│   ├── .env.example          # Frontend environment template
+│   └── package.json
 ├── backend/           # CodeIgniter 4 PHP API
 │   ├── app/
-│   │   ├── Controllers/        # API controllers
-│   │   ├── Config/            # Configuration files
+│   │   ├── Controllers/      # API controllers
+│   │   ├── Models/          # Database models
+│   │   ├── Config/          # Configuration files
 │   │   └── ...
+│   ├── .env.example          # Backend environment template
 │   ├── composer.json
-│   └── spark
-├── .vscode/
-│   └── tasks.json             # VS Code tasks for development
+│   └── spark                # CodeIgniter CLI tool
+├── scripts/
+│   └── setup.js             # Automated setup script
+├── expense_tracker.sql      # Database schema
+├── package.json             # Root package configuration
 └── README.md
 ```
 
-## Prerequisites
+## 🔧 Available NPM Scripts
 
-Before you begin, ensure you have the following installed:
+Run these commands from the **root directory**:
 
-- **Node.js** (v16 or higher) and npm
-- **PHP** (v7.4 or higher)
-- **Composer** (PHP package manager)
-- **Ionic CLI**: `npm install -g @ionic/cli`
+- `npm install` - Complete automated setup
+- `npm start` - Start both frontend and backend servers
+- `npm run start:frontend` - Start only the Ionic development server
+- `npm run start:backend` - Start only the CodeIgniter API server
+- `npm run install:frontend` - Install frontend dependencies only
+- `npm run install:backend` - Install backend dependencies only
+- `npm run build:frontend` - Build frontend for production
 
-## Quick Start
+## ⚙️ Configuration Files
 
-### 1. Install Dependencies
-
-**Frontend (Ionic):**
-```bash
-cd frontend
-npm install
-```
-
-**Backend (CodeIgniter):**
-```bash
-cd backend
-composer install --ignore-platform-req=ext-intl
-```
-
-### 2. Start Development Servers
-
-**Option A: Using VS Code Tasks (Recommended)**
-1. Open the project in VS Code
-2. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
-3. Type "Tasks: Run Task"
-4. Select "Start Both Servers"
-
-**Option B: Manual Start**
-
-**Backend (CodeIgniter) - Terminal 1:**
-```bash
-cd backend
-php -S localhost:8080 -t public
-```
-*Note: If `php spark serve` fails due to path issues, use the PHP built-in server instead.*
-
-**Frontend (Ionic) - Terminal 2:**
-```bash
-cd frontend
-ionic serve
-```
-*Note: If you encounter webpack path errors, see the Troubleshooting section below.*
-
-### 3. Access the Applications
-
-- **Ionic App**: http://localhost:8100
-- **CodeIgniter API**: http://localhost:8080
-
-## API Endpoints
-
-The CodeIgniter backend provides the following REST API endpoints:
-
-- `GET /api` - API information and available endpoints
-- `GET /api/users` - Get all users
-- `GET /api/users/{id}` - Get specific user
-- `POST /api/users` - Create new user
-- `PUT /api/users/{id}` - Update specific user
-- `DELETE /api/users/{id}` - Delete specific user
-
-## Development Features
-
-### Frontend (Ionic)
-- Angular framework with TypeScript
-- Ionic UI components
-- HTTP client service for API communication
-- CORS handling for development
-- Mobile-responsive design
-
-### Backend (CodeIgniter)
-- RESTful API structure
-- CORS middleware for cross-origin requests
-- JSON response formatting
-- Modular controller architecture
-
-### VS Code Integration
-- Ionic snippets and Angular language service
-- PHP intellisense for CodeIgniter
-- Predefined tasks for development workflow
-- Extensions for enhanced development experience
-
-## VS Code Tasks Available
-
-- **Start Both Servers**: Runs both Ionic and CodeIgniter servers simultaneously
-- **Start Ionic Dev Server**: Runs only the Ionic development server
-- **Start CodeIgniter Server**: Runs only the CodeIgniter server
-- **Build Ionic for Production**: Creates production build of Ionic app
-- **Install Frontend Dependencies**: Installs npm packages for Ionic
-- **Install Backend Dependencies**: Installs Composer packages for CodeIgniter
-
-## Configuration
-
-### Environment Variables
-
-Create a `.env` file in the backend directory for CodeIgniter configuration:
-
+### Backend Configuration (`backend/.env`)
 ```env
 CI_ENVIRONMENT = development
-
-app.baseURL = 'http://localhost:8080'
+app.baseURL = 'http://localhost:8080/'
 
 database.default.hostname = localhost
-database.default.database = your_database_name
-database.default.username = your_username
-database.default.password = your_password
+database.default.database = expense_recorder
+database.default.username = root
+database.default.password = 
 database.default.DBDriver = MySQLi
+database.default.port = 3306
 ```
 
-### CORS Configuration
+### Frontend Configuration (`frontend/src/environments/environment.ts`)
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8080/api'
+};
+```
 
-CORS is already configured in the API controller to allow cross-origin requests from the Ionic development server.
+## 🌐 API Endpoints
 
-## Building for Production
+The backend provides these REST API endpoints:
 
-### Ionic (Mobile App)
+**Authentication:**
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - User login
+- `POST /api/auth/logout` - User logout
+
+**Expenses:**
+- `GET /api/expenses` - Get all expenses
+- `GET /api/expenses/today` - Get today's expenses
+- `GET /api/expenses/monthly` - Get monthly expenses
+- `GET /api/expenses/summary` - Get expense summary
+- `POST /api/expenses` - Create new expense
+- `PUT /api/expenses/{id}` - Update expense
+- `DELETE /api/expenses/{id}` - Delete expense
+
+**Budget:**
+- `GET /api/budgets` - Get budget information
+- `POST /api/budgets` - Create/update budget
+- `POST /api/budgets/update-spent` - Update spent amount
+
+**Categories:**
+- `GET /api/categories` - Get all categories
+- `POST /api/categories` - Create new category
+- `PUT /api/categories/{id}` - Update category
+
+## 🐛 Troubleshooting
+
+### "Cannot connect to backend" Error
+
+**Solution:**
+1. Ensure backend server is running: `npm run start:backend`
+2. Check database connection in `backend/.env`
+3. Verify database is created and imported
+4. Check API URL in `frontend/src/environments/environment.ts`
+
+### Port Already in Use
+
+**Backend (8080):**
+```bash
+# Find and kill process on Windows
+netstat -ano | findstr :8080
+taskkill /PID <process_id> /F
+
+# Or change port in backend/.env
+app.baseURL = 'http://localhost:8081/'
+```
+
+**Frontend (8100):**
 ```bash
 cd frontend
-ionic build --prod
+ng serve --port 8101
+# Update API calls if needed
 ```
 
-For mobile deployment:
+### Database Connection Failed
+
+1. Verify MySQL/MariaDB is running
+2. Check credentials in `backend/.env`
+3. Ensure database `expense_recorder` exists
+4. Import schema: `mysql -u root -p expense_recorder < expense_tracker.sql`
+
+### Module Not Found Errors
+
 ```bash
-ionic capacitor add ios
+# Clear and reinstall
+rm -rf node_modules package-lock.json
+npm install
+
+# For frontend specifically
+cd frontend
+rm -rf node_modules package-lock.json
+npm install
+
+# For backend specifically
+cd backend
+rm -rf vendor composer.lock
+composer install
+```
+
+### Composer/PHP Issues
+
+**Error: "composer not found"**
+- Install Composer from https://getcomposer.org/
+- Add Composer to system PATH
+
+**Error: "PHP extensions missing"**
+- Enable required extensions in `php.ini`:
+  - extension=intl
+  - extension=mysqli
+  - extension=mbstring
+
+## 📱 Building for Mobile
+
+### Android
+```bash
+cd frontend
 ionic capacitor add android
-ionic capacitor run ios
+ionic capacitor build android
 ionic capacitor run android
 ```
 
-### CodeIgniter (API)
-For production deployment, ensure:
-1. Configure your web server (Apache/Nginx)
-2. Set `CI_ENVIRONMENT = production` in `.env`
-3. Configure proper database connections
-4. Set appropriate CORS origins for your domain
+### iOS (Mac only)
+```bash
+cd frontend
+ionic capacitor add ios
+ionic capacitor build ios
+ionic capacitor run ios
+```
 
-## Troubleshooting
+## 🔒 Security Notes for Production
 
-### Common Issues
+Before deploying to production:
 
-1. **CORS Errors**: Make sure the CodeIgniter server is running on port 8080
-2. **API Connection Failed**: Verify both servers are running and ports are correct
-3. **Module Not Found**: Run `npm install` or `composer install` to install dependencies
-4. **PHP intl Extension Missing**: Enable `extension=intl` in your `php.ini` file
-5. **Path Issues with Special Characters**: If your username contains special characters (like `!`), you may encounter webpack configuration errors
+1. **Update environment files:**
+   - Set `CI_ENVIRONMENT = production` in backend/.env
+   - Set `production: true` in environment.prod.ts
 
-### Port Conflicts
+2. **Secure database:**
+   - Use strong passwords
+   - Limit user permissions
+   - Enable SSL connections
 
-If default ports are in use:
-- Change Ionic port: `ionic serve --port 8101`
-- Change CodeIgniter port: `php -S localhost:8081 -t public` (from backend directory)
-- Update API service baseUrl in `frontend/src/app/services/api.service.ts`
+3. **Update CORS settings:**
+   - Configure allowed origins in backend
+   - Remove wildcard (*) origins
 
-### Path Issues with Special Characters
+4. **Use HTTPS:**
+   - Update apiUrl to use https://
+   - Configure SSL certificates
 
-If your Windows username contains special characters (like `!`, `@`, etc.), you may encounter issues:
+## 🎯 Transferring to Another Computer
 
-**For CodeIgniter:**
-- Use `php -S localhost:8080 -t public` instead of `php spark serve`
+To transfer this project to another computer:
 
-**For Ionic:**
-- Try running from a directory without special characters
-- Or use a different terminal/command prompt
-- Consider creating a symbolic link to your project in a path without special characters
+1. **Copy the entire project folder** (or use Git)
+2. **Run on new computer:**
+   ```bash
+   npm install
+   ```
+3. **Update database settings** in `backend/.env` if database credentials differ
+4. **Import database schema** if database doesn't exist on new machine
+5. **Start servers:**
+   ```bash
+   npm start
+   ```
 
-## Next Steps
+That's it! The project is fully portable and self-contained.
 
-1. **Database Integration**: Add database models and migrations to CodeIgniter
-2. **Authentication**: Implement JWT or session-based authentication
-3. **Mobile Features**: Add Capacitor plugins for device features
-4. **Testing**: Add unit and integration tests
-5. **Deployment**: Set up CI/CD pipelines for production deployment
+## 📝 Development Workflow
 
-## Contributing
+1. Make changes to frontend (Angular) or backend (PHP)
+2. Changes auto-reload in development mode
+3. Test API endpoints using the Ionic app or tools like Postman
+4. Commit changes to version control
+5. Deploy when ready
+
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
+2. Create a feature branch: `git checkout -b feature-name`
 3. Make your changes
 4. Test thoroughly
-5. Submit a pull request
+5. Commit: `git commit -m 'Add feature'`
+6. Push: `git push origin feature-name`
+7. Submit a pull request
 
-## License
+## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source and available under the MIT License.
